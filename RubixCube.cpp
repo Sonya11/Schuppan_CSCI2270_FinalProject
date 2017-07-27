@@ -19,40 +19,7 @@ vertex* rubixGraph::searchVertex(std::string name){
     //if gone through all verticies and still not found:
     return nullptr;
 }
-void rubixGraph::print(){
-    //basic printing template(one space in-between each letter)
-    //to be viewed as if it folds along the dotted lines INTO the page (i.e. the middle face is on the top when folded and the lowest face is on the bottom when folded)
-    //keep in mind that it is important to view the folding pattern in this way, or some sides will appear to rotate in the wrong direction
-    std::cout<<"          O O        "<<std::endl; //10 spaces L/R
-    std::cout<<"          O O        "<<std::endl; //10 spaces L/R
-    std::cout<<"          ---        "<<std::endl; //10 spaces L/R
-    std::cout<<"    O O | O O | O O    "<<std::endl; //4 spaces L/R
-    std::cout<<"    O O | O O | O O    "<<std::endl; //4 spaces L/R
-    std::cout<<"          ---        "<<std::endl; //10 spaces L/R
-    std::cout<<"          O O        "<<std::endl; //||
-    std::cout<<"          O O        "<<std::endl; //||
-    std::cout<<"          ---        "<<std::endl; //||
-    std::cout<<"          O O        "<<std::endl; //||
-    std::cout<<"          O O        "<<std::endl; //||
-}
-void rubixGraph::printCube(){
-    //to be viewed as if it folds along the dotted lines INTO the page (i.e. the middle face is on the top when folded and the lowest face is on the bottom when folded)
-    //keep in mind that it is important to view the folding pattern in this way, or some sides might appear to rotate in the wrong direction
-    std::cout<<""<<std::endl;
-    std::cout<<"          "<<vertices[21].color<<" "<<vertices[15].color<<"            Side Numbers:             "<<std::endl; //10 spaces L/R
-    std::cout<<"          "<<vertices[9].color<<" "<<vertices[3].color<<"                   4  "<<std::endl; //10 spaces L/R
-    std::cout<<"          ---                 5 6 3  "<<std::endl; //10 spaces L/R
-    std::cout<<"    "<<vertices[16].color<<" "<<vertices[4].color<<" | "<<vertices[5].color<<" "<<vertices[11].color<<" | "<<vertices[8].color<<" "<<vertices[20].color<<"             2  "<<std::endl; //4 spaces L/R
-    std::cout<<"    "<<vertices[22].color<<" "<<vertices[10].color<<" | "<<vertices[17].color<<" "<<vertices[23].color<<" | "<<vertices[2].color<<" "<<vertices[14].color<<"             1     "<<std::endl; //4 spaces L/R
-    std::cout<<"          ---                   "<<std::endl; //10 spaces L/R
-    std::cout<<"          "<<vertices[1].color<<" "<<vertices[7].color<<"                    "<<std::endl; //||
-    std::cout<<"          "<<vertices[13].color<<" "<<vertices[19].color<<"                     "<<std::endl; //||
-    std::cout<<"          ---                    "<<std::endl; //||
-    std::cout<<"          "<<vertices[0].color<<" "<<vertices[6].color<<"                    "<<std::endl; //||
-    std::cout<<"          "<<vertices[12].color<<" "<<vertices[18].color<<"                     "<<std::endl; //||
-    std::cout<<""<<std::endl;
-    std::cout<<""<<std::endl;
-}
+
 void rubixGraph::insertVertex(std::string name, std::string color, int side, bool isRight, bool isTop){ //inserting vertex into vertices vector
     bool found = false;
      for(uint8_t i = 0; i < vertices.size(); i++){
@@ -66,6 +33,7 @@ void rubixGraph::insertVertex(std::string name, std::string color, int side, boo
         vertices.push_back(newVertex);
      }
 }
+
 void rubixGraph::insertEdge(std::string name1, std::string name2, int relationship, int leftInPair){
     //NOTE: name1 is not necessarily before name2
     bool edgeExists = false;
@@ -101,109 +69,31 @@ void rubixGraph::insertEdge(std::string name1, std::string name2, int relationsh
         }
     }
 }
-void rubixGraph::buildCube(){
-    //R = red, G = green, B = blue, Y = yellow, W = white, O = orange
-    //1 = lowest square, 2 = square up one from lowest, 3 = right square, 4 = highest square, 5 = left square, 6 = middle square
-    //squareNameList notation ex: TL1 = "Top Left (side)1"
 
-    //initializing name, color, and side number lists
-    const int numberOfSides = 6;
-    const int numberOfSquares = 24;
-    std::string colorArray[numberOfSides] = {"R","G","B","Y","W","O"};
-    std::string squareNameList[numberOfSquares] = {"TL1","TL2","TL3","TL4","TL5","TL6","TR1","TR2","TR3","TR4","TR5","TR6",
-                                                    "BL1","BL2","BL3","BL4","BL5","BL6","BR1","BR2","BR3","BR4","BR5","BR6"};
-    int sideNumList[numberOfSides] = {1,2,3,4,5,6};
-
-    //loading in the name, color, and side number to the graph
-    for (int i = 0; i < numberOfSquares; i++){
-        //matching vertex values with correct name:
-        std::string currentName = squareNameList[i];
-        if(currentName.find("R") != std::string::npos){ //if "R" is found in name
-            if(currentName.find("T") != std::string::npos){ //if "T" is found in name
-                insertVertex(currentName, colorArray[i%numberOfSides], sideNumList[i%numberOfSides], true, true);
-            }else{ //if "T" is NOT found in name (if B)
-                insertVertex(currentName, colorArray[i%numberOfSides], sideNumList[i%numberOfSides], true, false);
-            }
-        }else{ //if "R" is NOT found in name (if L)
-            if(currentName.find("T") != std::string::npos){ //if "T" is found in name
-                insertVertex(currentName, colorArray[i%numberOfSides], sideNumList[i%numberOfSides], false, true);
-            }else{ //if "T" is NOT found in name (if B)
-                insertVertex(currentName, colorArray[i%numberOfSides], sideNumList[i%numberOfSides], false, false);
-            }
+ void rubixGraph::scrambleCube(){
+     //scramble algorithm implemented in a way that the cube is still solvable - uses the turn functions instead of simply randomly moving around all the colors
+    int randNum2, randNum3;
+    int randNum1 = rand()%14+7;//for how many times to do the entire process below (7 to 20 times)
+    for(int i = 0; i < randNum1; i++){
+        randNum2 = rand()%4; //for number of times to turn the same side (0 to 3 times)
+        randNum3 = rand()%6+1; //for which side to turn (side 1 - 6)
+        for(int i = 0; i < randNum2; i++){
+            turnRight(randNum3);
         }
-    }
-    //adding edges
-    int shareFace;
-    //if both vertices are on the SAME FACE
-    for(int i = 0; i < numberOfSquares; i++){
-        for(int j = 0; j < numberOfSquares; j++){
-            if(vertices[i].sideNum == vertices[j].sideNum){
-                shareFace = 1;
-                insertEdge(vertices[i].squareName, vertices[j].squareName, shareFace, -1);
-            }
+        randNum2 = rand()%4; //for number of times to turn the same side (0 to 3 times)
+        randNum3 = rand()%6+1; //for which side to turn (side 1 - 6)
+        for(int i = 0; i < randNum2; i++){
+            turnLeft(randNum3);
         }
-    }
-
-    //if both vertices are NOT on SAME FACE, but are touching corners
-    shareFace = 0;
-    for(int j = 1; j <= numberOfSides; j++){
-        cornerEdgeFill(j, shareFace);
-    }
-}
- void rubixGraph::cornerEdgeFill(int side, int isFaceShared){
-    int edgeNum = 8;
-    int squaresNum = 4;
-    int leftInPair[edgeNum] = {1,1,1,1,0,0,0,0};
-    //defining which names are associated with which side of the cube
-    std::string side6Filling[edgeNum] = {"TL5", "TL4", "TL3", "TL2", "TR4", "TR3", "TR2", "TR5"};
-    std::string vertex6Name[squaresNum] = {"TL6", "TR6", "BR6", "BL6"};
-    std::string side5Filling[edgeNum] = {"TR4", "BL6", "BL2", "BL1", "TL6", "TL2", "TL1", "BR4"};
-    std::string vertex5Name[squaresNum] = {"TL5", "TR5", "BR5", "BL5"};
-    std::string side4Filling[edgeNum] = {"TR3", "TL6", "BL5", "BR1", "TR6", "TL5", "BL1", "BR3"};
-    std::string vertex4Name[squaresNum] = {"TL4", "TR4", "BR4", "BL4"};
-    std::string side3Filling[edgeNum] = {"TR2", "TR6", "BL4", "TR1", "BR6", "TL4", "BR1", "BR2"};
-    std::string vertex3Name[squaresNum] = {"TL3", "TR3", "BR3", "BL3"};
-    std::string side2Filling[edgeNum] = {"TR5", "BR6", "BL3", "TL1", "BL6", "TL3", "TR1", "BR5"};
-    std::string vertex2Name[squaresNum] = {"TL2", "TR2", "BR2", "BL2"};
-    std::string side1Filling[edgeNum] = {"BR5", "BR2", "BR3", "BR4", "BL2", "BL3", "BL4", "BL5"};
-    std::string vertex1Name[squaresNum] = {"TL1", "TR1", "BR1", "BL1"};
-
-    //inserting edges based on side values and unique names associated with each side
-    switch(side){
-    case 1:
-        for(int i = 0; i < edgeNum; i++){
-            insertEdge(vertex1Name[i%4], side1Filling[i], isFaceShared, leftInPair[i]);
-        }
-        break;
-    case 2:
-        for(int i = 0; i < edgeNum; i++){
-            insertEdge(vertex2Name[i%4], side2Filling[i], isFaceShared, leftInPair[i]);
-        }
-        break;
-    case 3:
-        for(int i = 0; i < edgeNum; i++){
-            insertEdge(vertex3Name[i%4], side3Filling[i], isFaceShared, leftInPair[i]);
-        }
-        break;
-    case 4:
-        for(int i = 0; i < edgeNum; i++){
-            insertEdge(vertex4Name[i%4], side4Filling[i], isFaceShared, leftInPair[i]);
-        }
-        break;
-    case 5:
-        for(int i = 0; i < edgeNum; i++){
-            insertEdge(vertex5Name[i%4], side5Filling[i], isFaceShared, leftInPair[i]);
-        }
-        break;
-    case 6:
-        for(int i = 0; i < edgeNum; i++){
-            insertEdge(vertex6Name[i%4], side6Filling[i], isFaceShared, leftInPair[i]);
-        }
-        break;
     }
  }
 
- void rubixGraph::turnRight(int sideNumber){
+ void rubixGraph::solveCube(){
+    vertices.clear();//clears vertices to start from beginning again
+    buildCube(); //rebuilds cube
+ }
+
+void rubixGraph::turnRight(int sideNumber){
     //declaring pointer for all adjacent face vertices
     vertex* topLeftV; vertex* topRightV; vertex* bottomLeftV; vertex* bottomRightV;
     //find vertices that have same side number as sideNum(aka find the face vertices):
@@ -350,27 +240,128 @@ void rubixGraph::buildCube(){
     secondAdjTL->ptr2v->color = secondAdjTR->ptr2v->color;
     secondAdjTR->ptr2v->color = colorSaver;
  }
- void rubixGraph::scrambleCube(){
-     //scramble algorithm implemented in a way that the cube is still solvable - uses the turn functions instead of simply randomly moving around all the colors
-    int randNum2, randNum3;
-    int randNum1 = rand()%14+7;//for how many times to do the entire process below (7 to 20 times)
-    for(int i = 0; i < randNum1; i++){
-        randNum2 = rand()%4; //for number of times to turn the same side (0 to 3 times)
-        randNum3 = rand()%6+1; //for which side to turn (side 1 - 6)
-        for(int i = 0; i < randNum2; i++){
-            turnRight(randNum3);
-        }
-        randNum2 = rand()%4; //for number of times to turn the same side (0 to 3 times)
-        randNum3 = rand()%6+1; //for which side to turn (side 1 - 6)
-        for(int i = 0; i < randNum2; i++){
-            turnLeft(randNum3);
+
+void rubixGraph::buildCube(){
+    //R = red, G = green, B = blue, Y = yellow, W = white, O = orange
+    //1 = lowest square, 2 = square up one from lowest, 3 = right square, 4 = highest square, 5 = left square, 6 = middle square
+    //squareNameList notation ex: TL1 = "Top Left (side)1"
+
+    //initializing name, color, and side number lists
+    const int numberOfSides = 6;
+    const int numberOfSquares = 24;
+    std::string colorArray[numberOfSides] = {"R","G","B","Y","W","O"};
+    std::string squareNameList[numberOfSquares] = {"TL1","TL2","TL3","TL4","TL5","TL6","TR1","TR2","TR3","TR4","TR5","TR6",
+                                                    "BL1","BL2","BL3","BL4","BL5","BL6","BR1","BR2","BR3","BR4","BR5","BR6"};
+    int sideNumList[numberOfSides] = {1,2,3,4,5,6};
+
+    //loading in the name, color, and side number to the graph
+    for (int i = 0; i < numberOfSquares; i++){
+        //matching vertex values with correct name:
+        std::string currentName = squareNameList[i];
+        if(currentName.find("R") != std::string::npos){ //if "R" is found in name
+            if(currentName.find("T") != std::string::npos){ //if "T" is found in name
+                insertVertex(currentName, colorArray[i%numberOfSides], sideNumList[i%numberOfSides], true, true);
+            }else{ //if "T" is NOT found in name (if B)
+                insertVertex(currentName, colorArray[i%numberOfSides], sideNumList[i%numberOfSides], true, false);
+            }
+        }else{ //if "R" is NOT found in name (if L)
+            if(currentName.find("T") != std::string::npos){ //if "T" is found in name
+                insertVertex(currentName, colorArray[i%numberOfSides], sideNumList[i%numberOfSides], false, true);
+            }else{ //if "T" is NOT found in name (if B)
+                insertVertex(currentName, colorArray[i%numberOfSides], sideNumList[i%numberOfSides], false, false);
+            }
         }
     }
+    //adding edges
+    int shareFace;
+    //if both vertices are on the SAME FACE
+    for(int i = 0; i < numberOfSquares; i++){
+        for(int j = 0; j < numberOfSquares; j++){
+            if(vertices[i].sideNum == vertices[j].sideNum){
+                shareFace = 1;
+                insertEdge(vertices[i].squareName, vertices[j].squareName, shareFace, -1);
+            }
+        }
+    }
+
+    //if both vertices are NOT on SAME FACE, but are touching corners
+    shareFace = 0;
+    for(int j = 1; j <= numberOfSides; j++){
+        cornerEdgeFill(j, shareFace);
+    }
+}
+
+ void rubixGraph::cornerEdgeFill(int side, int isFaceShared){
+    int edgeNum = 8;
+    int squaresNum = 4;
+    int leftInPair[edgeNum] = {1,1,1,1,0,0,0,0};
+    //defining which names are associated with which side of the cube
+    std::string side6Filling[edgeNum] = {"TL5", "TL4", "TL3", "TL2", "TR4", "TR3", "TR2", "TR5"};
+    std::string vertex6Name[squaresNum] = {"TL6", "TR6", "BR6", "BL6"};
+    std::string side5Filling[edgeNum] = {"TR4", "BL6", "BL2", "BL1", "TL6", "TL2", "TL1", "BR4"};
+    std::string vertex5Name[squaresNum] = {"TL5", "TR5", "BR5", "BL5"};
+    std::string side4Filling[edgeNum] = {"TR3", "TL6", "BL5", "BR1", "TR6", "TL5", "BL1", "BR3"};
+    std::string vertex4Name[squaresNum] = {"TL4", "TR4", "BR4", "BL4"};
+    std::string side3Filling[edgeNum] = {"TR2", "TR6", "BL4", "TR1", "BR6", "TL4", "BR1", "BR2"};
+    std::string vertex3Name[squaresNum] = {"TL3", "TR3", "BR3", "BL3"};
+    std::string side2Filling[edgeNum] = {"TR5", "BR6", "BL3", "TL1", "BL6", "TL3", "TR1", "BR5"};
+    std::string vertex2Name[squaresNum] = {"TL2", "TR2", "BR2", "BL2"};
+    std::string side1Filling[edgeNum] = {"BR5", "BR2", "BR3", "BR4", "BL2", "BL3", "BL4", "BL5"};
+    std::string vertex1Name[squaresNum] = {"TL1", "TR1", "BR1", "BL1"};
+
+    //inserting edges based on side values and unique names associated with each side
+    switch(side){
+    case 1:
+        for(int i = 0; i < edgeNum; i++){
+            insertEdge(vertex1Name[i%4], side1Filling[i], isFaceShared, leftInPair[i]);
+        }
+        break;
+    case 2:
+        for(int i = 0; i < edgeNum; i++){
+            insertEdge(vertex2Name[i%4], side2Filling[i], isFaceShared, leftInPair[i]);
+        }
+        break;
+    case 3:
+        for(int i = 0; i < edgeNum; i++){
+            insertEdge(vertex3Name[i%4], side3Filling[i], isFaceShared, leftInPair[i]);
+        }
+        break;
+    case 4:
+        for(int i = 0; i < edgeNum; i++){
+            insertEdge(vertex4Name[i%4], side4Filling[i], isFaceShared, leftInPair[i]);
+        }
+        break;
+    case 5:
+        for(int i = 0; i < edgeNum; i++){
+            insertEdge(vertex5Name[i%4], side5Filling[i], isFaceShared, leftInPair[i]);
+        }
+        break;
+    case 6:
+        for(int i = 0; i < edgeNum; i++){
+            insertEdge(vertex6Name[i%4], side6Filling[i], isFaceShared, leftInPair[i]);
+        }
+        break;
+    }
  }
- void rubixGraph::solveCube(){
-    vertices.clear();//clears vertices to start from beginning again
-    buildCube(); //rebuilds cube
- }
+
+void rubixGraph::printCube(){
+    //to be viewed as if it folds along the dotted lines INTO the page (i.e. the middle face is on the top when folded and the lowest face is on the bottom when folded)
+    //keep in mind that it is important to view the folding pattern in this way, or some sides might appear to rotate in the wrong direction
+    std::cout<<""<<std::endl;
+    std::cout<<"          "<<vertices[21].color<<" "<<vertices[15].color<<"            Side Numbers:             "<<std::endl; //10 spaces L/R
+    std::cout<<"          "<<vertices[9].color<<" "<<vertices[3].color<<"                   4  "<<std::endl; //10 spaces L/R
+    std::cout<<"          ---                 5 6 3  "<<std::endl; //10 spaces L/R
+    std::cout<<"    "<<vertices[16].color<<" "<<vertices[4].color<<" | "<<vertices[5].color<<" "<<vertices[11].color<<" | "<<vertices[8].color<<" "<<vertices[20].color<<"             2  "<<std::endl; //4 spaces L/R
+    std::cout<<"    "<<vertices[22].color<<" "<<vertices[10].color<<" | "<<vertices[17].color<<" "<<vertices[23].color<<" | "<<vertices[2].color<<" "<<vertices[14].color<<"             1     "<<std::endl; //4 spaces L/R
+    std::cout<<"          ---                   "<<std::endl; //10 spaces L/R
+    std::cout<<"          "<<vertices[1].color<<" "<<vertices[7].color<<"                    "<<std::endl; //||
+    std::cout<<"          "<<vertices[13].color<<" "<<vertices[19].color<<"                     "<<std::endl; //||
+    std::cout<<"          ---                    "<<std::endl; //||
+    std::cout<<"          "<<vertices[0].color<<" "<<vertices[6].color<<"                    "<<std::endl; //||
+    std::cout<<"          "<<vertices[12].color<<" "<<vertices[18].color<<"                     "<<std::endl; //||
+    std::cout<<""<<std::endl;
+    std::cout<<""<<std::endl;
+}
 
  void rubixGraph::retrieveAction(int side, std::string direction){
     //convert integer to string
@@ -428,6 +419,7 @@ void rubixStack::push(std::string entry){
     entries.push_back(entry);
     top++;
 }
+
 std::string rubixStack::pop(){
     if(!isEmpty()){
         top--;

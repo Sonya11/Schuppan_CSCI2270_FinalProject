@@ -6,15 +6,15 @@ void header(){
     std::cout<<"WELCOME TO THE VIRTUAL RUBIX CUBE!"<<std::endl;
     std::cout<<""<<std::endl;
     std::cout<<"Note: "<<std::endl;
-    std::cout<<"  R = red, Y = yellow, O = orange, B = blue, G = green, W = white"<<std::endl;
-    std::cout<<"  The cube is to be viewed as if it folds along the"<<std::endl;
+    std::cout<<"  -R = red, Y = yellow, O = orange, B = blue, G = green, W = white"<<std::endl;
+    std::cout<<"  -The cube is to be viewed as if it folds along the"<<std::endl;
     std::cout<<"  dotted lines INTO the page"<<std::endl;
     std::cout<<"        (i.e. face 6 is on the top when folded and face 1" <<std::endl;
     std::cout<<"        is on the bottom when folded)"<<std::endl;
-    std::cout<<"  The side numbers correlating to cube are shown to the right"<<std::endl;
+    std::cout<<"  -The side numbers correlating to cube are shown to the right"<<std::endl;
     std::cout<<""<<std::endl;
     std::cout<<""<<std::endl;
-    std::cout<<"Enter a valid number option from the menu below to manipulate the cube:"<<std::endl;
+    std::cout<<"You are ready to begin! Enter a valid number option from the menu below to manipulate the cube:"<<std::endl;
     std::cout<<""<<std::endl;
 }
 

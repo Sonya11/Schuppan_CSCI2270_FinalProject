@@ -16,6 +16,7 @@ int main()
 
     int option;
     while(option != 6){
+        //recieving menu number input from user:
         std::cin>>option;
         std::cin.clear();
         std::cin.ignore();
@@ -27,7 +28,9 @@ int main()
             case 1:{ //turn a side
                 int side;
                 std::string direction;
+                //used to check if the user entered a valid response:
                 int validSideNumbers[6] = {1,2,3,4,5,6};
+                //flags for whether or not the user entered a valid response:
                 bool isValidSide = false;
                 bool isValidDirection = false;
 
