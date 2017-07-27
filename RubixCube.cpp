@@ -86,11 +86,17 @@ void rubixGraph::insertEdge(std::string name1, std::string name2, int relationsh
             turnLeft(randNum3);
         }
     }
+    while(!stackObj.isEmpty()){ //erasing all previous user turns from stack since cube is being scrambled
+      stackObj.pop();
+    }
  }
 
  void rubixGraph::solveCube(){
     vertices.clear();//clears vertices to start from beginning again
     buildCube(); //rebuilds cube
+    while(!stackObj.isEmpty()){ //erasing all previous user turns from stack since cube is being solved
+      stackObj.pop();
+    }
  }
 
 void rubixGraph::turnRight(int sideNumber){
@@ -397,9 +403,11 @@ void rubixGraph::printCube(){
         int side;
         s >> side;
         if(direction == "R"){ //if the user turned a side right, it must be turned left to undo it
+            std::cout<<""<<std::endl;
             std::cout<<"Turning side "<<side<<" back to the left:"<<std::endl;
             turnLeft(side);
         }else{ //direction == L
+          std::cout<<""<<std::endl;
             std::cout<<"Turning side "<<side<<" back to the right:"<<std::endl;
             turnRight(side);
         }
@@ -424,7 +432,7 @@ std::string rubixStack::pop(){
     if(!isEmpty()){
         top--;
         std::string popped = entries[top];
-        entries[top].erase();
+        entries.pop_back();
         return popped;
     }else{
         return "";
@@ -433,6 +441,8 @@ std::string rubixStack::pop(){
 
 void rubixStack::printStack(){
     for(uint8_t i = 0; i < entries.size(); i++){
+      if(entries[i] != ""){
         std::cout<<entries[i]<<" ";
+      }
     }
 }

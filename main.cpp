@@ -21,7 +21,7 @@ int main()
         std::cin.clear();
         std::cin.ignore();
         switch(option){
-            case 0:{ //display menu
+            case 7:{ //display menu
                 advancedMenu();
                 break;
             }
@@ -93,19 +93,59 @@ int main()
                 break;
             }
             case 3:{ //scramble cube
-                //scramble algorithm implemented in a way that the cube is still solvable - view function for more info
-                std::cout<<""<<std::endl; //(formatting)
-                std::cout<<"Scrambled cube: "<<std::endl;
-                //scrambles the cube and prints it:
-                graphObj.scrambleCube();
-                graphObj.printCube();
-                options(); //displays next action options to user
+                std::string toContinue;
+                bool isValidInput = false;
+                std::cout<<"If you scramble the cube, all of your past turns will be erased."<<std::endl;
+                std::cout<<"Would you like to continue? (Y/N) ";
+                while (isValidInput == false){ //checking if the user entered valid input
+                  std::cin>>toContinue; //revieving input from user
+                  std::cin.clear();
+                  std::cin.ignore();
+                  if(toContinue.compare("Y") == 0){ //if the user enters Y, then the cube will be scrambled
+                    isValidInput = true; //Y is a valid input
+                    std::cout<<""<<std::endl; //(formatting)
+                    std::cout<<"Scrambled cube: "<<std::endl;
+                    //scrambles the cube and prints it:
+                    graphObj.scrambleCube(); //(scramble algorithm implemented in a way that the cube is still solvable - view function for more info)
+                    graphObj.printCube();
+                    options(); //displays next action options to user
+                  }else if(toContinue.compare("N") == 0){ //if user enters N, the scramble function will not be called
+                    isValidInput = true; //N is a vlaid input
+                    std::cout<<""<<std::endl; //(formatting)
+                    std::cout<<"Cancelling cube scramble"<<std::endl;
+                    options(); //displays next action options to user
+                  }
+                  if(isValidInput == false){ //if the inout is not N or Y, it is inavlid input
+                    std::cout<<"Invalid input - enter Y or N: "; //prompts user for a valid input
+                  }
+                }
                 break;
             }
             case 4:{ //solve cube
-                //solves the cube and prints it:
-                graphObj.solveCube();
-                graphObj.printCube();
+                std::string toContinue;
+                bool isValidInput = false;
+                std::cout<<"If you solve the cube, all of your past turns will be erased."<<std::endl;
+                std::cout<<"Would you like to continue? (Y/N) ";
+                while (isValidInput == false){ //checking if the user entered valid input
+                  std::cin>>toContinue; //revieving input from user
+                  std::cin.clear();
+                  std::cin.ignore();
+                  if(toContinue.compare("Y") == 0){ //if the user enters Y, then the cube will be solved
+                    isValidInput = true; //Y is a valid input
+                    std::cout<<""<<std::endl; //(formatting)
+                    std::cout<<"Solved cube: "<<std::endl;
+                    //solves the cube and prints it:
+                    graphObj.solveCube();
+                    graphObj.printCube();
+                  }else if(toContinue.compare("N") == 0){ //if user enters N, the solve function is not called
+                    isValidInput = true; //N is a vlaid input
+                    std::cout<<""<<std::endl; //(formatting)
+                    std::cout<<"Cancelling cube solve"<<std::endl;
+                  }
+                  if(isValidInput == false){ //if the inout is not N or Y, it is inavlid input
+                    std::cout<<"Invalid input - enter Y or N: "; //prompts user for a valid input
+                  }
+                }
                 options(); //displays next action options to user
                 break;
             }
@@ -120,7 +160,6 @@ int main()
             }
             default:{ //invalid input checker
                 std::cout<<"Invalid input - choose again"<<std::endl;
-                options(); //displays next action options to user
             }
         }
     }

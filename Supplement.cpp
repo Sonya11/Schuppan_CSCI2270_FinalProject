@@ -31,8 +31,8 @@ std::cout<<"6. Quit Program"<<std::endl;
 std::cout<<""<<std::endl;
 }
 
-void options(){ //pop_back
+void options(){
 std::cout<<""<<std::endl;
 std::cout<<"Action completed!"<<std::endl;
-std::cout<<"Enter a valid menu number. If you would like to view the menu again, enter 0."<<std::endl;
+std::cout<<"Enter a valid menu number. If you would like to view the menu again, enter 7."<<std::endl;
 }
