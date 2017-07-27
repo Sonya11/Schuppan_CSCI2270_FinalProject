@@ -9,3 +9,5 @@
 	There are no known system requirements. The program has been tested to run on both Windows and Linux operating systems.
 ### Dependancies 
 	There are no third-party dependancies for this program.
+### Open Issues/Bugs
+	There are no open issues or bugs in this program. 
